@@ -30,7 +30,7 @@
 
   home-manager.useUserPackages = true;
   home-manager.users.pta2002 = import ./home.nix { inherit pkgs; } // {
-    imports = [ nixvim.nixosModules.nixvim ];
+    imports = [ nixvim.homeManagerModules.nixvim ];
   };
 
   # Documentation
