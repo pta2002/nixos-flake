@@ -21,6 +21,15 @@
   home.packages = with pkgs; [
     git
   ];
+
+  programs.nixvim = {
+    enable = true;
+    package = pkgs.neovim-nightly;
+
+    colorschemes.gruvbox.enable = true;
+    options.number = true;
+  };
+
   # home.sessionVariables = { EDITOR = "nvim"; };
 
   # user.colorscheme = {

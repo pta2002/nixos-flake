@@ -1,4 +1,4 @@
-{ pkgs, home-manager, ... }:
+{ pkgs, home-manager, nixvim, ... }:
 {
   # Localization stuff
   time.timeZone = "Europe/Lisbon";
@@ -29,7 +29,9 @@
   };
 
   home-manager.useUserPackages = true;
-  home-manager.users.pta2002 = import ./home.nix { inherit pkgs; };
+  home-manager.users.pta2002 = import ./home.nix { inherit pkgs; } // {
+    imports = [ nixvim.nixosModules.nixvim ];
+  };
 
   # Documentation
   documentation.dev.enable = true;
