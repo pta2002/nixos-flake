@@ -24,8 +24,8 @@
       config.allowUnfree = true;
       overlays = [ inputs.neovim-nightly.overlay ];
     };
-  in {
-    nixosConfigurations.mercury = nixpkgs.lib.nixosSystem {
+
+    makeConfig = hostname: nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         home-manager.nixosModules.home-manager
@@ -36,5 +36,8 @@
         })
       ];
     };
+  in {
+    nixosConfigurations.mercury = makeConfig "mercury";
+    nixosConfigurations.hydrogen = makeConfig "hydrogen";
   };
 }
