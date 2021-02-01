@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, nixvim, laptop, lib, ... }:
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -18,57 +18,42 @@
   # changes in each release.
   home.stateVersion = "21.03";
 
-  home.packages = with pkgs; [
-    git
+  home.sessionVariables.EDITOR = "nvim";
+
+  programs.nixvim.package = pkgs.neovim-nightly;
+
+  imports = [
+    nixvim.homeManagerModules.nixvim
+    ./modules/nvim
+
+    ./modules/git.nix
+    ./modules/fish.nix
+    ./modules/kitty.nix
+    ./modules/starship.nix
   ];
 
-  programs.nixvim = {
-    enable = true;
-    package = pkgs.neovim-nightly;
+  home.packages = with pkgs; [
+    # Development
+    ninja ripgrep gcc gdb gnumake
 
-    colorschemes.gruvbox.enable = true;
-    options.number = true;
-  };
+    # Utils
+    hledger hledger-web htop unzip libqalculate
 
-  # home.sessionVariables = { EDITOR = "nvim"; };
+    # Work
+    pandoc zoom-us libreoffice
 
-  # user.colorscheme = {
-  #   color0 = "#282828";
-  #   color1 = "#cc241d";
-  #   color2 = "#98971a";
-  #   color3 = "#d79921";
-  #   color4 = "#458588";
-  #   color5 = "#b16286";
-  #   color6 = "#689d6a";
-  #   color8 = "#928374";
-  #   color7 = "#a89984";
-  #   color9 = "#fb4934";
-  #   color10 = "#b8bb26";
-  #   color11 = "#fabd2f";
-  #   color12 = "#83a598";
-  #   color13 = "#d3869b";
-  #   color14 = "#8ec07c";
-  #   color15 = "#ebdbb2";
-
-
-  #   vimPlugin.plugin = pkgs.vimPlugins.gruvbox;
-  #   vimPlugin.config = ''
-  #     colorscheme gruvbox
-  #     let g:lightline = { 'colorscheme': 'gruvbox' }
-  #   '';
-  # };
+    # Entertainment
+    spotify vlc
+  ] ++ (lib.optionals laptop [
+    brightnessctl
+    acpid
+    acpi
+  ]);
 
   # imports = [
-  #   ./modules/git.nix
-  #   ./modules/fish.nix
-  #   ./modules/kitty.nix
   #   ./modules/awesome.nix
   #   ./modules/theme.nix
   #   ./modules/zathura.nix
-  #   ./modules/starship.nix
-  #   ./modules/nvim
-
-  #   ./modules/colorscheme.nix
 
   #   ./user.nix
   #   ./machines/mercury.nix

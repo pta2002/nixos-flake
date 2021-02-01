@@ -25,19 +25,21 @@
       overlays = [ inputs.neovim-nightly.overlay ];
     };
 
-    makeConfig = hostname: nixpkgs.lib.nixosSystem {
+    lib = pkgs.lib;
+
+    makeConfig = hostname: laptop: nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         home-manager.nixosModules.home-manager
         inputs.nixvim.nixosModules.nixvim
-        (import ./common.nix (inputs // { inherit pkgs; }))
+        (import ./common.nix (inputs // { inherit pkgs laptop lib; }))
         ({ ... }: {
           networking.hostName = "mercury";
         })
       ];
     };
   in {
-    nixosConfigurations.mercury = makeConfig "mercury";
-    nixosConfigurations.hydrogen = makeConfig "hydrogen";
+    nixosConfigurations.mercury = makeConfig "mercury" true;
+    nixosConfigurations.hydrogen = makeConfig "hydrogen" false;
   };
 }
