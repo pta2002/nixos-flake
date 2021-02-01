@@ -44,6 +44,16 @@
 
     plugins = {
       lightline.enable = true;
+
+      lsp = {
+        enable = true;
+        servers = {
+          clangd.enable = true;
+          rust-analyzer.enable = true;
+        };
+      };
+
+      treesitter.enable = true;
     };
 
     extraPlugins = with pkgs.vimPlugins; [
