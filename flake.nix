@@ -22,24 +22,31 @@
     pkgs = (import nixpkgs) {
       system = "x86_64-linux";
       config.allowUnfree = true;
-      overlays = [ inputs.neovim-nightly.overlay ];
+      overlays = [
+        inputs.neovim-nightly.overlay
+        (import ./overlays/awesome.nix)
+      ];
     };
 
     lib = pkgs.lib;
 
-    makeConfig = hostname: laptop: nixpkgs.lib.nixosSystem {
+    makeConfig = hostname: laptop: extra: nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         home-manager.nixosModules.home-manager
         inputs.nixvim.nixosModules.nixvim
         (import ./common.nix (inputs // { inherit pkgs laptop lib; }))
         ({ ... }: {
-          networking.hostName = "mercury";
+          networking.hostName = hostname;
         })
+        (import ./profiles)
+        extra
       ];
     };
   in {
-    nixosConfigurations.mercury = makeConfig "mercury" true;
-    nixosConfigurations.hydrogen = makeConfig "hydrogen" false;
+    nixosConfigurations.mercury = makeConfig "mercury" true {};
+    nixosConfigurations.hydrogen = makeConfig "hydrogen" false ({ ... }: {
+      profiles.graphical.enable = true;
+    });
   };
 }

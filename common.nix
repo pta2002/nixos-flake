@@ -5,18 +5,6 @@
   i18n.defaultLocale = "en_US.UTF-8";
   console.keyMap = "pt-latin1";
 
-  # Graphical stuff
-  services.xserver = {
-    enable = true;
-    displayManager.lightdm.enable = true;
-    windowManager.awesome.enable = true;
-    layout = "pt";
-  };
-
-  # Sound stuff
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
-
   # Shell
   programs.fish.enable = true;
 
